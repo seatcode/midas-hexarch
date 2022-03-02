@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import type { Member } from './types'
 
+import { useState } from 'react'
 import ActionButton from '../../../components/ActionButton'
 import MemberCard from '../../../components/MemberCard'
-
-import type { Member } from './types'
 import styles from './index.module.css'
 
 const DEFAULT_MEMBERS: Member[] = [

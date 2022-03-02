@@ -1,4 +1,5 @@
 import type { MemberCardProps } from './types'
+
 import styles from './index.module.css'
 
 export default function MemberCard ({
