@@ -10,3 +10,7 @@
   letter-spacing: 1px;
   font-weight: bold;
 }
+.wrapper:hover {
+  border-color: 1px solid var(--color-accent);
+  color: var(--color-accent);
+}

@@ -2,3 +2,16 @@
   padding: 7px;
   border: 1px solid var(--color-text);
 }
+
+.removeButton {
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  background: var(--color-primary);
+  border: none;
+  border-radius: 100%;
+  margin-left: 8px;
+}
+.removeButton:hover {
+  background: var(--color-accent);
+}
