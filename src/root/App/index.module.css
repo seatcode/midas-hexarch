@@ -29,6 +29,13 @@
   gap: 15px;
 }
 
+.actionButtons {
+  margin-top: 10px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+}
+
 .footer {
   margin-top: 15px;
   font-size: 16px;

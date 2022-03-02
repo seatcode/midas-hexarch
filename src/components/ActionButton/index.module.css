@@ -1,0 +1,12 @@
+.wrapper {
+  cursor: pointer;
+  padding: 7px;
+  border: 2px solid var(--color-primary);
+  border-radius: 3px;
+  background: transparent;
+
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
