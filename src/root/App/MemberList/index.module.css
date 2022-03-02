@@ -1,0 +1,13 @@
+.memberList {
+  background: var(--color-gray);
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.actionButtons {
+  margin-top: 10px;
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+}
