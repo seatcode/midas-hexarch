@@ -48,7 +48,7 @@ export default function MembersList (): JSX.Element {
       </div>
       <div className={styles.actionButtons}>
         <ActionButton onClick={handleEditClick}>{isEditing ? 'Done' : 'Edit'}</ActionButton>
-        <ActionButton onClick={handleAddClick}>Add</ActionButton>
+        {!isEditing && <ActionButton onClick={handleAddClick}>Add</ActionButton>}
       </div>
     </>
   )
