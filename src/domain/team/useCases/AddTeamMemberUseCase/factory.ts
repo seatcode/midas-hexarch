@@ -1,5 +1,9 @@
+import type { UseCaseFactory } from '../../../types'
+
 import AddTeamMemberUseCase from './index'
 
-export default (): AddTeamMemberUseCase => {
-  return new AddTeamMemberUseCase()
+const factory: UseCaseFactory = ({ config }): AddTeamMemberUseCase => {
+  return new AddTeamMemberUseCase({ config })
 }
+
+export default factory
