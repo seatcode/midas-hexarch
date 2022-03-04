@@ -1,4 +1,4 @@
-import type { Config, UseCase } from '../../../types'
+import type { Config, UseCase } from 'domain/types'
 
 interface AddTeamMemberUseCase extends UseCase {}
 class AddTeamMemberUseCase {

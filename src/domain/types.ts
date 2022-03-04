@@ -11,7 +11,7 @@ export { Config }
 export interface UseCaseParams {[key: string]: unknown}
 
 export interface UseCase {
-  execute: (params: UseCaseParams) => Promise<unknown>
+  execute: (params?: UseCaseParams) => Promise<unknown>
   config?: Config
 }
 

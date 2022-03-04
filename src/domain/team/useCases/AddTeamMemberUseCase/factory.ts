@@ -1,4 +1,4 @@
-import type { UseCaseFactory } from '../../../types'
+import type { UseCaseFactory } from 'domain/types'
 
 import AddTeamMemberUseCase from './index'
 

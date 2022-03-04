@@ -1,6 +1,8 @@
 import type { Member } from './types'
 
 import { useState } from 'react'
+import { useDomain } from 'domain/react'
+import { TEAM_C_ADD_TEAM_MEMBER_USE_CASE } from 'domain/symbols'
 import ActionButton from '../../../components/ActionButton'
 import MemberCard from '../../../components/MemberCard'
 import styles from './index.module.css'
@@ -16,6 +18,7 @@ const DEFAULT_MEMBERS: Member[] = [
 export default function MembersList (): JSX.Element {
   const [members, setMembers] = useState<Member[]>(DEFAULT_MEMBERS)
   const [isEditing, setIsEditing] = useState(false)
+  const domain = useDomain()
 
   const handleEditClick = (): void => {
     setIsEditing(prev => !prev)
@@ -25,6 +28,12 @@ export default function MembersList (): JSX.Element {
     const name = window.prompt("Introduce the new member's name:")
     if (name === null) return
     setMembers(prev => [...prev, { name }])
+
+    domain.get(TEAM_C_ADD_TEAM_MEMBER_USE_CASE).then(
+      (addTeamMemberUseCase) => {
+        addTeamMemberUseCase.execute()
+      }
+    )
   }
 
   const handleMemberRemoveClick = (targetName: string): void => {

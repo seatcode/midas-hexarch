@@ -20,7 +20,8 @@
     "@vitejs/plugin-react": "1.0.7",
     "ts-standard": "11.0.0",
     "typescript": "4.4.4",
-    "vite": "2.6.14"
+    "vite": "2.6.14",
+    "vite-tsconfig-paths": "3.4.1"
   },
   "engines": {
     "node": "16",

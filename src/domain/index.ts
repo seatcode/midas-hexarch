@@ -10,10 +10,10 @@ const USE_CASES: {[key: symbol]: () => Promise<{default: UseCaseFactory}>} = {
 
 const entryPoint = {
   config,
-  get: (key: symbol) => {
+  get: async (key: symbol) => {
+    const { default: useCaseFactory } = await USE_CASES[key]()
     return {
-      async execute (params: UseCaseParams) {
-        const { default: useCaseFactory } = await USE_CASES[key]()
+      async execute (params?: UseCaseParams) {
         return await useCaseFactory({ config }).execute(params)
       }
     }
