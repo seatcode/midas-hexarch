@@ -1,10 +1,10 @@
 import type { UseCaseParams, UseCaseFactory } from './types'
 
 import config from './config'
-import { TEAM_C_ADD_TEAM_MEMBER_USE_CASE } from './symbols'
+import { TEAM_ADD_TEAM_MEMBER_USE_CASE } from './symbols'
 
 const USE_CASES: {[key: symbol]: () => Promise<{default: UseCaseFactory}>} = {
-  [TEAM_C_ADD_TEAM_MEMBER_USE_CASE]: async () =>
+  [TEAM_ADD_TEAM_MEMBER_USE_CASE]: async () =>
     await import('./team/useCases/AddTeamMemberUseCase/factory')
 }
 
