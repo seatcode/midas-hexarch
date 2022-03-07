@@ -2,7 +2,7 @@ import type { Member } from './types'
 
 import { useState } from 'react'
 import { useDomain } from 'domain/react'
-import { TEAM_ADD_TEAM_MEMBER_USE_CASE } from 'domain/symbols'
+import { TEAM_ADD_TEAM_MEMBER_USE_CASE } from 'domain/useCases'
 import ActionButton from '../../../components/ActionButton'
 import MemberCard from '../../../components/MemberCard'
 import styles from './index.module.css'
@@ -30,8 +30,8 @@ export default function MembersList (): JSX.Element {
     setMembers(prev => [...prev, { name }])
 
     domain.get(TEAM_ADD_TEAM_MEMBER_USE_CASE).then(
-      (addTeamMemberUseCase) => {
-        addTeamMemberUseCase.execute()
+      (useCase) => {
+        useCase.execute({ debug: true })
       }
     )
   }

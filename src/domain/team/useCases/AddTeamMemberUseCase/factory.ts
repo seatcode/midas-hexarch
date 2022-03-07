@@ -1,8 +1,8 @@
-import type { UseCaseFactory } from 'domain/types'
+import type { Config } from 'domain/types'
 
 import AddTeamMemberUseCase from './index'
 
-const factory: UseCaseFactory = ({ config }): AddTeamMemberUseCase => {
+const factory = ({ config }: {config: Config}): AddTeamMemberUseCase => {
   return new AddTeamMemberUseCase({ config })
 }
 

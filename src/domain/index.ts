@@ -1,21 +1,23 @@
-import type { UseCaseParams, UseCaseFactory } from './types'
-
 import config from './config'
-import { TEAM_ADD_TEAM_MEMBER_USE_CASE } from './symbols'
+import { TEAM_ADD_TEAM_MEMBER_USE_CASE } from './useCases'
 
-const USE_CASES: {[key: symbol]: () => Promise<{default: UseCaseFactory}>} = {
+const USE_CASE_FACTORY_MODULES = {
   [TEAM_ADD_TEAM_MEMBER_USE_CASE]: async () =>
     await import('./team/useCases/AddTeamMemberUseCase/factory')
 }
 
 const entryPoint = {
   config,
-  get: async (key: symbol) => {
-    const { default: useCaseFactory } = await USE_CASES[key]()
+  get: async (key: typeof TEAM_ADD_TEAM_MEMBER_USE_CASE) => {
+    const { default: useCaseFactory } = await USE_CASE_FACTORY_MODULES[key]()
+    type OriginalExecuteType = ReturnType<typeof useCaseFactory>['execute']
+
+    const executeWithFactoryInjectedConfig: OriginalExecuteType = async (params) => {
+      return await useCaseFactory({ config }).execute(params)
+    }
+
     return {
-      async execute (params?: UseCaseParams) {
-        return await useCaseFactory({ config }).execute(params)
-      }
+      execute: executeWithFactoryInjectedConfig
     }
   }
 }
