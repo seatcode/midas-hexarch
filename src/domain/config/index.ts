@@ -1,14 +1,14 @@
 import type { Config } from './types'
 
 import merge from 'deepmerge'
-import devConfig from './envs/development'
-import proConfig from './envs/production'
-import commonConfig from './common'
+import baseConfig from './config'
+import devConfig from './config.development'
+import proConfig from './config.production'
 
 function makeConfigForEnvironment (): Config {
   const objectsToMerge = import.meta.env.MODE === 'production'
-    ? [commonConfig, proConfig]
-    : [commonConfig, devConfig]
+    ? [baseConfig, proConfig]
+    : [baseConfig, devConfig]
 
   return merge.all<Config>(objectsToMerge)
 }

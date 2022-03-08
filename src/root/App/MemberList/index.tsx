@@ -2,7 +2,6 @@ import type { Member } from './types'
 
 import { useState } from 'react'
 import { useDomain } from 'domain/react'
-import { TEAM_ADD_TEAM_MEMBER_USE_CASE } from 'domain/useCases'
 import ActionButton from '../../../components/ActionButton'
 import MemberCard from '../../../components/MemberCard'
 import styles from './index.module.css'
@@ -29,9 +28,9 @@ export default function MembersList (): JSX.Element {
     if (name === null) return
     setMembers(prev => [...prev, { name }])
 
-    domain.get(TEAM_ADD_TEAM_MEMBER_USE_CASE).then(
-      (useCase) => {
-        useCase.execute({ debug: true })
+    domain.AddTeamMemberUseCase.get().then(
+      useCase => {
+        useCase.execute()
       }
     )
   }

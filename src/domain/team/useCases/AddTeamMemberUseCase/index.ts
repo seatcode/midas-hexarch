@@ -8,7 +8,7 @@ class AddTeamMemberUseCase {
   }
 
   async execute ({ debug = false } = {}): Promise<void> {
-    console.log('AddTeamMemberUseCase executed!', debug)
+    console.log('AddTeamMemberUseCase executed!', debug, this.config)
   }
 }
 
