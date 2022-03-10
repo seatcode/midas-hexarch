@@ -28,8 +28,8 @@ export default function MembersList (): JSX.Element {
     if (name === null) return
     setMembers(prev => [...prev, { name }])
 
-    const addTeamMemberUseCase = await domain.AddTeamMemberUseCase.get()
-    await addTeamMemberUseCase.execute({ name })
+    const AddMemberUseCase = await domain.team.AddMemberUseCase.get()
+    await AddMemberUseCase.execute({ name })
   }
 
   const handleMemberRemoveClick = (targetName: string): void => {

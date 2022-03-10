@@ -2,9 +2,11 @@ import config from './config'
 
 const entryPoint = {
   config,
-  AddTeamMemberUseCase: {
-    get: async () => await import('./team/useCases/AddTeamMemberUseCase/factory')
-      .then(module => module.default({ config }))
+  team: {
+    AddMemberUseCase: {
+      get: async () => await import('./team/useCases/AddMemberUseCase/factory')
+        .then(module => module.default({ config }))
+    }
   }
 }
 
