@@ -23,16 +23,13 @@ export default function MembersList (): JSX.Element {
     setIsEditing(prev => !prev)
   }
 
-  const handleAddClick = (): void => {
+  const handleAddClick = async (): Promise<void> => {
     const name = window.prompt("Introduce the new member's name:")
     if (name === null) return
     setMembers(prev => [...prev, { name }])
 
-    domain.AddTeamMemberUseCase.get().then(
-      useCase => {
-        useCase.execute()
-      }
-    )
+    const addTeamMemberUseCase = await domain.AddTeamMemberUseCase.get()
+    await addTeamMemberUseCase.execute({ name })
   }
 
   const handleMemberRemoveClick = (targetName: string): void => {

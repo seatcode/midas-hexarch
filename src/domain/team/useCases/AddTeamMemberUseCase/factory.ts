@@ -1,4 +1,4 @@
-import type { Config } from 'domain/types'
+import { Config } from 'domain/base'
 
 import AddTeamMemberUseCase from './index'
 

@@ -1,14 +1,8 @@
-import type { Config, UseCase } from 'domain/types'
+import { UseCase } from 'domain/base'
 
-interface AddTeamMemberUseCase extends UseCase {}
-
-class AddTeamMemberUseCase {
-  constructor ({ config }: {config: Config}) {
-    this.config = config
-  }
-
-  async execute ({ debug = false } = {}): Promise<void> {
-    console.log('AddTeamMemberUseCase executed!', debug, this.config)
+class AddTeamMemberUseCase extends UseCase {
+  async execute ({ name }: {name: string}): Promise<void> {
+    console.log('AddTeamMemberUseCase:', name)
   }
 }
 
