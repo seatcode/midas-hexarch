@@ -43,7 +43,7 @@ export default function MembersList (): JSX.Element {
       <div className={styles.memberList}>
         {members.map(member => (
           <MemberCard
-            key={member.name}
+            key={member.id}
             name={member.name}
             onRemoveClick={
               isEditing
