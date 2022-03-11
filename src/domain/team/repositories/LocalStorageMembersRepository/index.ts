@@ -1,7 +1,5 @@
 import { Config, Repository } from 'domain/models'
-import MemberEntity from 'domain/team/models/MemberEntity'
-import MembersValue from 'domain/team/models/MembersValue'
-import MembersRepository from 'domain/team/models/MembersRepository'
+import { MemberEntity, MembersValue, MembersRepository } from 'domain/team/models'
 
 export default class LocalStorageMembersRepository extends Repository implements MembersRepository {
   private readonly storage: WindowLocalStorage['localStorage']

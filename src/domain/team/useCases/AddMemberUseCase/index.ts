@@ -1,6 +1,5 @@
 import { Config, UseCase } from 'domain/models'
-import MembersRepository from 'domain/team/models/MembersRepository'
-import MembersValue from 'domain/team/models/MembersValue'
+import { MembersValue, MembersRepository } from 'domain/team/models'
 
 export default class AddMemberUseCase extends UseCase {
   private readonly membersRepository

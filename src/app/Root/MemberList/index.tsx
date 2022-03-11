@@ -1,4 +1,4 @@
-import MembersValue from 'domain/team/models/MembersValue'
+import { MembersValue } from 'domain/team/models'
 
 import { useEffect, useState } from 'react'
 import { useDomain } from 'domain/react'
