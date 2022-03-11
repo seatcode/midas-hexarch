@@ -5,12 +5,12 @@ import { DomainProvider } from 'domain/react'
 import './styles/colors.css'
 import './styles/global.css'
 
-import App from './App'
+import Root from './Root'
 
 ReactDOM.render(
   <React.StrictMode>
     <DomainProvider>
-      <App />
+      <Root />
     </DomainProvider>
   </React.StrictMode>,
   document.getElementById('root')

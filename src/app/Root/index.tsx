@@ -1,7 +1,7 @@
 import MemberList from './MemberList'
 import styles from './index.module.css'
 
-export default function App (): JSX.Element {
+export default function Root (): JSX.Element {
   return (
     <div className={styles.wrapper}>
       <header>
