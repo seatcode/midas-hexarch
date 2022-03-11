@@ -1,10 +1,10 @@
 import { Config } from 'domain/models'
 
 import localStorageMembersRepositoryFactory from '../../repositories/LocalStorageMembersRepository/factory'
-import AddMemberUseCase from './index'
+import ListMembersUseCase from './index'
 
-export default function ({ config }: {config: Config}): AddMemberUseCase {
-  return new AddMemberUseCase({
+export default function ({ config }: {config: Config}): ListMembersUseCase {
+  return new ListMembersUseCase({
     config,
     membersRepository: localStorageMembersRepositoryFactory({ config })
   })

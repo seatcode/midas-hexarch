@@ -9,7 +9,7 @@ export { Config }
  * Use Cases
  */
 export type UseCaseFactory = (deps: {config: Config}) => UseCase
-export interface UseCaseParams {[key: string]: unknown}
+export type UseCaseExecuteArguments = unknown[]
 export abstract class UseCase {
   protected readonly config: Config
 
@@ -17,5 +17,16 @@ export abstract class UseCase {
     this.config = config
   }
 
-  abstract execute (params?: UseCaseParams): Promise<unknown>
+  abstract execute (...args: UseCaseExecuteArguments): Promise<unknown>
+}
+
+/**
+ * Repositories
+ */
+export abstract class Repository {
+  protected readonly config: Config
+
+  constructor ({ config }: {config: Config}) {
+    this.config = config
+  }
 }

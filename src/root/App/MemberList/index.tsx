@@ -1,23 +1,23 @@
-import type { Member } from './types'
+import MembersValue from 'domain/team/models/MembersValue'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDomain } from 'domain/react'
 import ActionButton from '../../../components/ActionButton'
 import MemberCard from '../../../components/MemberCard'
 import styles from './index.module.css'
 
-const DEFAULT_MEMBERS: Member[] = [
-  { name: 'Ismael' },
-  { name: 'Alba' },
-  { name: 'Jordi' },
-  { name: 'Anis' },
-  { name: 'Jesica' }
-]
-
 export default function MembersList (): JSX.Element {
-  const [members, setMembers] = useState<Member[]>(DEFAULT_MEMBERS)
+  const [members, setMembers] = useState<MembersValue>([])
   const [isEditing, setIsEditing] = useState(false)
   const domain = useDomain()
+
+  useEffect(() => {
+    (async () => {
+      const ListMembersUseCase = await domain.team.ListMembersUseCase.get()
+      const result = await ListMembersUseCase.execute()
+      setMembers(result)
+    })().catch(console.error)
+  }, [domain])
 
   const handleEditClick = (): void => {
     setIsEditing(prev => !prev)
@@ -26,14 +26,16 @@ export default function MembersList (): JSX.Element {
   const handleAddClick = async (): Promise<void> => {
     const name = window.prompt("Introduce the new member's name:")
     if (name === null) return
-    setMembers(prev => [...prev, { name }])
 
     const AddMemberUseCase = await domain.team.AddMemberUseCase.get()
-    await AddMemberUseCase.execute({ name })
+    const result = await AddMemberUseCase.execute(name)
+    setMembers(result)
   }
 
-  const handleMemberRemoveClick = (targetName: string): void => {
-    setMembers(prev => prev.filter(member => member.name !== targetName))
+  const handleMemberRemoveClick = async (targetId: string): Promise<void> => {
+    const RemoveMemberUseCase = await domain.team.RemoveMemberUseCase.get()
+    const result = await RemoveMemberUseCase.execute(targetId)
+    setMembers(result)
   }
 
   return (
@@ -45,7 +47,7 @@ export default function MembersList (): JSX.Element {
             name={member.name}
             onRemoveClick={
               isEditing
-                ? () => handleMemberRemoveClick(member.name)
+                ? async () => await handleMemberRemoveClick(member.id)
                 : null
             }
           />

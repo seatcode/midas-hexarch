@@ -2,7 +2,7 @@ import { Config, UseCase } from 'domain/models'
 import MembersRepository from 'domain/team/models/MembersRepository'
 import MembersValue from 'domain/team/models/MembersValue'
 
-export default class AddMemberUseCase extends UseCase {
+export default class RemoveMemberUseCase extends UseCase {
   private readonly membersRepository
 
   constructor (dependencies: {config: Config, membersRepository: MembersRepository}) {
@@ -11,7 +11,7 @@ export default class AddMemberUseCase extends UseCase {
     this.membersRepository = membersRepository
   }
 
-  async execute (name: string): Promise<MembersValue> {
-    return await this.membersRepository.add(name)
+  async execute (id: string): Promise<MembersValue> {
+    return await this.membersRepository.remove(id)
   }
 }
