@@ -1,4 +1,4 @@
-import type { Config } from './types'
+import { Config } from './models'
 
 import baseConfig from './config'
 import devConfig from './config.development'

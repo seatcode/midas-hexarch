@@ -1,9 +1,9 @@
-import type { Config } from './config/types'
+import { Config } from './config/models'
 
 /**
  * Re-export some core types for convinience
  */
-export { Config }
+export type { Config }
 
 /**
  * Use Cases
