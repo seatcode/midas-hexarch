@@ -1,6 +1,6 @@
 import config from './config'
 
-const entryPoint = {
+export default {
   config,
   team: {
     ListMembersUseCase: {
@@ -17,5 +17,3 @@ const entryPoint = {
     }
   }
 }
-
-export default entryPoint
