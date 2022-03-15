@@ -1,4 +1,4 @@
-import { Config, Repository } from 'domain/models'
+import { Config } from 'domain/models'
 import { MemberEntity, MembersValue, MembersRepository } from 'domain/team/models'
 
 interface Dependencies {
@@ -7,7 +7,7 @@ interface Dependencies {
   generateId: () => string
 }
 
-export default class LocalStorageMembersRepository extends Repository implements MembersRepository {
+export default class LocalStorageMembersRepository extends MembersRepository {
   private readonly storage: Dependencies['storage']
   private readonly generateId: Dependencies['generateId']
 
