@@ -22,7 +22,9 @@ abstract class WithConfig {
  * Exportable models so domain pieces inherit from these
  */
 export abstract class Repository extends WithConfig {}
-export abstract class Mapper extends WithConfig {}
+export abstract class Mapper<Input, Output> extends WithConfig {
+  abstract map (input: Input): Output
+}
 export abstract class Service extends WithConfig {
   abstract execute (...args: unknown[]): Promise<unknown>
 }
