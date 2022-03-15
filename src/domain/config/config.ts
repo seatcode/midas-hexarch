@@ -1,1 +1,3 @@
-export default {}
+export default {
+  STORAGE_KEY_MEMBERS: 'MIDAS_CREW_MEMBERS'
+}
