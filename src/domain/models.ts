@@ -1,9 +1,9 @@
 import { Config } from './config/models'
 
 /**
- * Common
+ * Utils
  * ---
- * Please do NOT export, these are intended for internal usage only
+ * Please do NOT export, these are intended for reducing code duplication in here
  */
 abstract class WithConfig {
   protected readonly config: Config
@@ -17,7 +17,7 @@ abstract class WithConfig {
 }
 
 /**
- * Public
+ * Domain models
  * ---
  * Exportable models so domain pieces inherit from these
  */
