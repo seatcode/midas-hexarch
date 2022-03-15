@@ -1,20 +1,15 @@
-import { Config } from 'domain/models'
 import { MemberEntity, MembersValue, MembersRepository } from 'domain/team/models'
 
-interface Dependencies {
-  config: Config
-  storage: WindowLocalStorage['localStorage']
-  generateId: () => string
-}
+import { nanoid } from 'nanoid'
 
 export default class LocalStorageMembersRepository extends MembersRepository {
-  private readonly storage: Dependencies['storage']
-  private readonly generateId: Dependencies['generateId']
+  private readonly storage: WindowLocalStorage['localStorage']
+  private readonly generateId: () => string
 
-  constructor (dependencies: Dependencies) {
-    super(dependencies)
-    this.storage = dependencies.storage
-    this.generateId = dependencies.generateId
+  constructor () {
+    super()
+    this.storage = window.localStorage
+    this.generateId = nanoid
   }
 
   async list (): Promise<MembersValue> {

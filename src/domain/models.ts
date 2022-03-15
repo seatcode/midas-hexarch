@@ -1,4 +1,5 @@
 import { Config } from './config/models'
+import config from './config'
 
 /**
  * Utils
@@ -8,7 +9,7 @@ import { Config } from './config/models'
 abstract class WithConfig {
   protected readonly config: Config
 
-  constructor ({ config }: {config: Config}) {
+  constructor () {
     /**
      * Config is always injected into any domain piece
      */
