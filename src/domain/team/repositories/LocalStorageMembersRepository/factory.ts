@@ -1,7 +1,7 @@
 import { Config } from 'domain/models'
 import { nanoid } from 'nanoid'
 
-import LocalStorageMembersRepository from './index'
+import LocalStorageMembersRepository from '.'
 
 export default function ({ config }: { config: Config }): LocalStorageMembersRepository {
   return new LocalStorageMembersRepository({
