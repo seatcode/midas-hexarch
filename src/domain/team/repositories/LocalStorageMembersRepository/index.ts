@@ -1,17 +1,15 @@
 import { Config } from 'domain/models'
 import { MemberEntity, MembersValue, MembersRepository } from 'domain/team/models'
 
-interface Dependencies {
-  config: Config
-  storage: WindowLocalStorage['localStorage']
-  generateId: () => string
-}
-
 export default class LocalStorageMembersRepository extends MembersRepository {
-  private readonly storage: Dependencies['storage']
-  private readonly generateId: Dependencies['generateId']
+  private readonly storage
+  private readonly generateId
 
-  constructor (dependencies: Dependencies) {
+  constructor (dependencies: {
+    config: Config
+    storage: WindowLocalStorage['localStorage']
+    generateId: () => string
+  }) {
     super(dependencies)
     this.storage = dependencies.storage
     this.generateId = dependencies.generateId

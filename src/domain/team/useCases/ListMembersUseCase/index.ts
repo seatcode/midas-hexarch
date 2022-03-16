@@ -1,15 +1,13 @@
 import { Config, UseCase } from 'domain/models'
 import { MembersValue, MembersRepository } from 'domain/team/models'
 
-interface Dependencies {
-  config: Config
-  membersRepository: MembersRepository
-}
-
 export default class ListMembersUseCase extends UseCase {
   private readonly membersRepository
 
-  constructor (dependencies: Dependencies) {
+  constructor (dependencies: {
+    config: Config
+    membersRepository: MembersRepository
+  }) {
     super(dependencies)
     this.membersRepository = dependencies.membersRepository
   }
