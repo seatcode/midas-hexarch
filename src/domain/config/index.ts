@@ -8,7 +8,7 @@ import devConfig from './config.development'
 import testConfig from './config.test-env'
 import proConfig from './config.production'
 
-function mergePartialConfigs (...configs: Array<{ [key: string]: unknown }>): Config {
+function mergePartialConfigs (...configs: Array<Partial<Config>>): Config {
   return merge.all<Config>(configs, { isMergeableObject: isPlainObject })
 }
 
