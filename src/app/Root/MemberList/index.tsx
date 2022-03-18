@@ -1,4 +1,4 @@
-import { MembersValue } from 'domain/team/models'
+import { ListMembersUseCaseOutput as Members } from 'domain/types/team'
 
 import { useEffect, useState } from 'react'
 import { useDomain } from 'domain/react'
@@ -7,7 +7,7 @@ import MemberCard from '../../../components/MemberCard'
 import styles from './index.module.css'
 
 export default function MembersList (): JSX.Element {
-  const [members, setMembers] = useState<MembersValue>([])
+  const [members, setMembers] = useState<Members>([])
   const [isEditing, setIsEditing] = useState(false)
   const domain = useDomain()
 

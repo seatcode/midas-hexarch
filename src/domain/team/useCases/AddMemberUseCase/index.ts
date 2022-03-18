@@ -1,6 +1,12 @@
 import { Config, UseCase } from 'domain/models'
 import { MembersValue, MembersRepository } from 'domain/team/models'
 
+type Output = MembersValue
+
+declare module 'domain/types/team' {
+  type AddMemberUseCaseOutput = Output
+}
+
 export default class AddMemberUseCase extends UseCase {
   private readonly membersRepository
 
@@ -12,7 +18,7 @@ export default class AddMemberUseCase extends UseCase {
     this.membersRepository = dependencies.membersRepository
   }
 
-  async execute (name: string): Promise<MembersValue> {
+  async execute (name: string): Promise<Output> {
     return await this.membersRepository.add(name)
   }
 }
