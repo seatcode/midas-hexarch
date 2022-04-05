@@ -35,13 +35,13 @@
 
 ## Introduction
 
-A Frontend framework like React is awesome, it brings in a modular approach to our UI logic so we can separate visual areas of the interface in smaller chunks (components) with a clearly defined set of responsiblities, and still understand how each piece relates each other.
+A Frontend framework like [React](https://reactjs.org) is awesome, it brings in a modular approach to our UI logic while still providing relationships to understand how every piece relates each other.
 
 But a complex business product needs more than UI logic. As the project grows, we may realize there's a growing amount of logic in no man's land.
 
-Of course you can move that logic into separated files and be cool with it for a while, but then there's no any special way to relate all of that logic in the way React does with components. That lack of relationship is a problem you'll eventually suffer from.
+Of course you can move that logic into separated files, but then you'll lack relationships and that's a problem you'll eventually suffer from.
 
-We're talking about [business logic](https://en.wikipedia.org/wiki/Business_logic), and some [design patterns](https://en.wikipedia.org/wiki/Software_design_pattern) exist in order to conviniently deal with it, providing proven ways of organizing and relating all of its relevant pieces. Hexagonal Architecture is one of those patterns.
+This is [business logic](https://en.wikipedia.org/wiki/Business_logic), and some [design patterns](https://en.wikipedia.org/wiki/Software_design_pattern) exist to deal with it. Proven ways of organizing and relating all of its relevant pieces. [Hexagonal Architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) is one of those patterns.
 
 ## Using from React
 
