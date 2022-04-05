@@ -11,12 +11,14 @@
   - [Types](#types)
   - [Context](#context)
 - [Domain pieces](#domain-pieces)
+  - [Dependency Injection](#dependency-injection)
+    - [Import rules](#import-rules)
+    - [Factory](#factory)
   - [Models](#models)
   - [Use Cases](#use-cases)
   - [Services](#services)
   - [Mappers](#mappers)
   - [Repositories](#repositories)
-- [Dependency injection](#dependency-injection)
 
 ## Introduction
 
@@ -178,7 +180,37 @@ If the building blocks of React are components, then the building blocks of the 
 
 All of them can use models, but not all of them can use every other kind of piece. For example, a repository cannot use a mapper. All the constraints are covered per each piece below.
 
-> **IMPORTANT:** Models can always be directly imported, while the rest of pieces CANNOT. Use cases, services, mappers and repositories that are not models can only be injected as dependencies through a factory. 🚫 **Importing something else that is not a model is strictly forbidden.** See why in [dependency injection](#dependency-injection) section.
+### Dependency Injection
+
+This a technique in which a class instance receives all it needs from the constructor, rather than directly importing the required modules at the beginning of the file as it's usually done in JS.
+
+This is done in Hexagonal Arquitechture for two reasons:
+
+- The entire domain works as a singleton.
+  - This way we have a single instance of the config that is readable from any point of the domain.
+- Any domain piece can be easily replaced by another dependency that meets the criteria (adapter pattern).
+
+For all of this to happen, we must respect some (not to) import rules and use something called factory pattern, which is covered below.
+
+#### Import rules
+
+- ✅ Models can be directly imported everywhere inside the domain.
+- 🚫 **Importing something else that is not a model is strictly forbidden out of factories.**
+
+Use cases, services, mappers and repositories that are not models can only be injected as dependencies through a factory.
+
+#### Factory
+
+This is a file that is present in every domain piece folder and it's in charge of creating an instance for its adjacent domain piece.
+
+Factories can import:
+
+- Other factories
+- 3rd party packages
+
+The purpose of a factory is supporting the injection of dependencies by providing the domain piece that is instantiated with the dependencies it requires.
+
+> Note: The config should always be injected as a dependency.
 
 ### Models
 
@@ -218,7 +250,7 @@ A simple example of a use case in the useCases directory of a `cart` context:
 useCases
 |- RemoveItemUseCase
    |- index.ts <-- Code
-   |- factory.ts <-- Dependency injection
+   |- factory.ts <-- Dependency Injection
 ```
 
 ```ts
@@ -274,7 +306,3 @@ A repository is a source of data. You can think of it as an API client as it pro
 It deals with all the logic that is necessary to connect and manage the access to any data source that is outside of the app, such as API endpoints, but also local storage, session storage, cookies, or other kind of sources.
 
 It can only use models.
-
-## Dependency injection
-
-TBD
