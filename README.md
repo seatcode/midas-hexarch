@@ -1,37 +1,22 @@
 <img alt="Hexagonal Architecture MIDAS FE" width="584" src="https://user-images.githubusercontent.com/4168389/161611798-da1be7af-4c88-4d01-94ad-0e153aea7710.png" />
 
-> All you need to know to do with Hexagonal Architecture in the MIDAS project
+> All you need to know to do Hexagonal Architecture in the MIDAS project
 
 - [Introduction](#introduction)
 - [Usage from React](#usage-from-react)
-- [Getting inside](#getting-inside)
 - [Concepts](#concepts)
   - [Domain](#domain)
   - [Config](#config)
-  - [Context](#context)
   - [Models](#models)
   - [Types](#types)
+  - [Context](#context)
 - [Domain pieces](#domain-pieces)
+  - [Models](#models-1)
   - [Use Cases](#use-cases)
   - [Services](#services)
   - [Mappers](#mappers)
   - [Repositories](#repositories)
-  - [Models](#models-1)
-    - [Entities](#entities)
-    - [Values](#values)
-    - [Responses](#responses)
-    - [Adapters (for repositories)](#adapters-for-repositories)
 - [Dependency injection](#dependency-injection)
-- [File structure](#file-structure)
-  - [Config directory](#config-directory)
-  - [@context directory](#context-directory)
-    - [useCases](#usecases)
-    - [services](#services-1)
-    - [mappers](#mappers-1)
-    - [repositories](#repositories-1)
-    - [models](#models-2)
-  - [Types directory](#types-directory)
-  - [Root files](#root-files)
 
 ## Introduction
 
@@ -45,7 +30,7 @@ This is [business logic](https://en.wikipedia.org/wiki/Business_logic), and some
 
 ## Usage from React
 
-Let's start from what we know. Imagine you're building an online shop and you've got this fancy Cart component:
+Imagine you're building an online shop and you've got this fancy Cart component:
 
 ```tsx
 function Cart({ items }) {
@@ -112,18 +97,30 @@ So, after awaiting the promise that `get()` returns, we have the requested use c
 
 And that's it! Now we obviously would have to implement the RemoveItemUseCase so it does what it's supposed to do. But before we can go down that road we need to make some concepts clear.
 
-## Getting inside
-
 ## Concepts
 
 ### Domain
 
 The whole business logic is enclosed within the domain. The inner pieces of the domain can interact with each other, but can't interact with the outside.
 
-From the outside perspective, the domain is a black box. The only thing you can see about the domain from React is:
+From the outside perspective, the domain is a black box. The only thing you can see from the domain in the React side is:
 
-- A list of use cases, which are essentially actions you can execute.
+- A list of use cases grouped by context.
 - The domain's config object.
+
+There is an actual folder in the project that is called `domain` and looks like this:
+
+```
+domain
+|- config/
+|- [contextA]/
+|- [contextB]/
+|- [contextC]/
+|- types/
+|- entry.ts
+|- models.ts
+|- react.ts
+```
 
 ### Config
 
@@ -131,21 +128,15 @@ From the outside perspective, the domain is a black box. The only thing you can 
 - It can also be read from the outside of the domain.
 - It's aware of the environment.
 
-### Context
+The config folder looks like this:
 
-A context is a business topic to group all its related logic. Any domain piece must be enclosed within a specific context.
-
-For a given context, we can find:
-
-- Models
-  - Entities
-  - Values
-  - Responses
-  - Adapters (for repositories)
-- Repositories
-- Mappers
-- Services
-- Use Cases (with public types)
+```
+config
+|- config.development.ts
+|- config.production.ts
+|- config.test-env.ts
+|- config.ts
+```
 
 ### Models
   - They're private, meant to be consumed from the inside of the domain.
@@ -158,97 +149,132 @@ For a given context, we can find:
   - They're only written inside the use cases, to support dealing with use case execution results from the outside.
   - Cannot be used inside the domain.
 
-## Domain pieces
+### Context
 
-### Use Cases
+A context is a group of logic that is related by some topic. Providing a clear name for a context is especially important, as it will give sense to everything it contains.
 
-### Services
-
-### Mappers
-
-### Repositories
-
-### Models
-
-#### Entities
-#### Values
-#### Responses
-#### Adapters (for repositories)
-
-## Dependency injection
-
-
-## File structure
-
-When doing Hexagonal Architecture we find a folder called `domain`. This is the place where all of the Hexagonal Architecture related logic lives:
+Any domain piece must be enclosed within a specific context, and the resulting directory for a `cart` context looks like this:
 
 ```
-domain
-|- config/
-|- @context/
-|- types/
-|- entry.ts
-|- models.ts
-|- react.ts
-```
-
-### Config directory
-
-```
-config
-|- config.development.ts
-|- config.production.ts
-|- config.test-env.ts
-|- config.ts
-```
-
-### @context directory
-
-```
-@context
+cart
+|- models/
 |- useCases/
 |- services/
 |- mappers/
 |- repositories/
-|- models/
 ```
 
-#### useCases
+Let's dig into what those domain pieces are.
+
+## Domain pieces
+
+If the building blocks of React are components, then the building blocks of the domain are:
+
+- Models
+- Use Cases
+- Services
+- Mappers
+- Repositories
+
+All of them can use models, but not all of them can use every other kind of piece. For example, a repository cannot use a mapper. All the constraints are covered per each piece below.
+
+> **IMPORTANT:** Models can always be directly imported, while the rest of pieces CANNOT. Use cases, services, mappers and repositories that are not models can only be injected as dependencies through a factory. 🚫 **Importing something else that is not a model is strictly forbidden.** See why in [dependency injection](#dependency-injection) section.
+
+### Models
+
+They're contracts so we clearly know:
+
+- The shape of any piece of data we're using accross all the domain pieces.
+- The shape that a given repository implementation has to match (adapter pattern).
+
+All the models are actually TypeScript interfaces, types, and abstract classes. But they are named after the following categories:
+
+| Name pattern | It's an... | Purpose |
+|-|-|-|
+| `[DataName]Entity` | _Interface_ | Unique data that has an `id` |
+| `[DataName]Value` | _Interface_ | Data that is not unique |
+| `[DataName]Response` | _Interface_ | A response from a specific repository method |
+| `[Entity]Repository` | _Abstract class_ | An expected repository implementation |
+
+Some name examples: `ProductEntity`, `ProductListValue`, `ProductListResponse`, `ProductRepository`.
+
+### Use Cases
+
+Name pattern: `[Action][EntityOrValue]UseCase`
+
+A use case is a public action that can be triggered from the outside of the domain. It's impelemented as a class with a single public asynchronous method called `execute`.
+
+It can only use:
+- Models
+- Services
+- Mappers
+- Repositories
+
+> **Note:** It CANNOT use other use cases. If you need to reuse logic from a use case consider creating a service.
+
+A simple example of a use case in the useCases directory of a `cart` context:
 
 ```
-@context
-|- useCases/
-   |- GetSomethingUseCase
-      |- index.ts
-      |- factory.ts
+useCases
+|- RemoveItemUseCase
+   |- index.ts <-- Code
+   |- factory.ts <-- Dependency injection
 ```
 
-#### services
-#### mappers
-#### repositories
-#### models
+```ts
+// index.ts
+import { Config, UseCase } from 'domain/models'
+import { CartRepository } from 'domain/cart/models'
 
-### Types directory
+export default class RemoveItemUseCase extends UseCase {
+  private readonly cartRepository
 
+  constructor (dependencies: {
+    config: Config
+    cartRepository: CartRepository
+  }) {
+    super(dependencies)
+    this.cartRepository = dependencies.cartRepository
+  }
+
+  async execute ({ id }: { id: number }): Promise<void> {
+    return await this.cartRepository.delete(id)
+  }
+}
 ```
-types
-|- @context.ts
-```
 
-### Root files
+### Services
 
-```
-domain
-|- ...
-|- entry.ts ✅ <- You'll need to add every new use case in here
-|- models.ts 🚫
-|- react.ts 🚫
-```
+Name pattern: `[Action][EntityOrValue]Service`
 
-🚫 Be aware that you won't edit these, but here is what they do:
+A service is the same thing as a use case but it's private, meaning it cannot be consumed from the outside of the domain.
 
-| File | Purpose |
-|-|-|
-| models.ts | Exports common models from which you'll extend your domain pieces. |
-| react.ts | Exports hooks so you can use the domain from React. |
+It can only use:
+- Models
+- Other services
+- Mappers
+- Repositories
 
+### Mappers
+
+Name pattern: `From[Input]To[Output]Mapper`
+
+A mapper is a data transformer. It's meant to transform domain data. It has a public synchronous `map` method that accepts an input argument and returns something else as an output.
+
+It can only use:
+- Models
+- Other mappers
+
+### Repositories
+
+Name pattern: `[Source][Entity]Repository`
+
+A repository is a source of data. You can think of it as an API client as it provides an open list of public asynchronous methods for a given subject, like CRUD methods (but not necessarily) such as list, get, delete, and so on.
+
+It deals with all the logic that is necessary to connect and manage the access to any data source that is outside of the app, such as API endpoints, but also local storage, session storage, cookies, or other kind of sources.
+
+It can only use models.
+
+## Dependency injection
+
+TBD
