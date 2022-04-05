@@ -3,7 +3,7 @@
 > All you need to know to do with Hexagonal Architecture in the MIDAS project
 
 - [Introduction](#introduction)
-- [Using from React](#using-from-react)
+- [Usage from React](#usage-from-react)
 - [Getting inside](#getting-inside)
 - [Concepts](#concepts)
   - [Domain](#domain)
@@ -43,16 +43,74 @@ Of course you can move that logic into separated files, but then you'll lack rel
 
 This is [business logic](https://en.wikipedia.org/wiki/Business_logic), and some [design patterns](https://en.wikipedia.org/wiki/Software_design_pattern) exist to deal with it. Proven ways of organizing and relating all of its relevant pieces. [Hexagonal Architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) is one of those patterns.
 
-## Using from React
+## Usage from React
+
+Let's start from what we know. Imagine you're building an online shop and you've got this fancy Cart component:
 
 ```tsx
-import { useDomain } from 'domain/react'
-
-// ...
-
-const domain = useDomain()
-const useCase = domain.
+function Cart({ items }) {
+  return (
+    <div>
+      {items.map(item => <ProductCard item={item} />)}
+    </div>
+  )
+}
 ```
+
+Now, we want to be able to remove a product from the cart. To do that, let's add a handler function as always:
+
+```diff
+function Cart({ items }) {
++ const handleRemove = async id => {
++   // TODO: Remove a product from the cart API
++ }
+
+  return (
+    <div>
+-     {items.map(item => <ProductCard item={item} />)}
++     {items.map(item => (
++       <ProductCard item={item} onRemove={handleRemove} />
++     ))}
+    </div>
+  )
+}
+```
+
+Then, the function is ready to be filled with the API call, dealing with the response, transforming it, updating the local storage entry for the cache... OR, we can have all that done by the domain.
+
+To use the domain, we have to import the hook and consume it:
+
+```diff
++import { useDomain } from 'domain/react'
+
+function Cart({ items }) {
++ const domain = useDomain()
+```
+
+And we're good to go:
+
+```tsx
+const handleRemove = async id => {
+  // We first get the use case
+  const removeItem = await domain.cart.RemoveItemUseCase.get()
+  // Then we can execute it
+  await removeItem.execute({ id })
+}
+```
+
+You may be wondering why there's two steps to it. Why do I have to "get" the use case first? Why not just execute the use case as if it were a function? Well, the answer is [code splitting](https://developer.mozilla.org/en-US/docs/Glossary/Code_splitting).
+
+By doing this, the code from `RemoveItemUseCase` will not be downloaded until the remove button is clicked, which reduces the whole app bundle size. This has many performance benefits.
+
+Now, let's take a closer look at the parts:
+
+<center><image width="656" src="https://user-images.githubusercontent.com/4168389/161741685-2268ff49-8f0a-4119-951c-05fa5d9bf892.png" /></center>
+
+So, after awaiting the promise that `get()` returns, we have the requested use case ready to use in a variable. No mystery here, all use cases have a single method called execute:
+
+<center><image width="502" src="https://user-images.githubusercontent.com/4168389/161743734-2e1e6fc5-08e2-43f5-a613-b66b450f4674.png" /></center>
+
+And that's it! Now we obviously would have to implement the RemoveItemUseCase so it does what it's supposed to do. But before we can go down that road we need to make some concepts clear.
 
 ## Getting inside
 
