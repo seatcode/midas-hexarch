@@ -104,11 +104,11 @@ By doing this, the code from `RemoveItemUseCase` will not be downloaded until th
 
 Now, let's take a closer look at the parts:
 
-<center><image width="656" src="https://user-images.githubusercontent.com/4168389/161741685-2268ff49-8f0a-4119-951c-05fa5d9bf892.png" /></center>
+<p align="center"><image width="656" src="https://user-images.githubusercontent.com/4168389/161741685-2268ff49-8f0a-4119-951c-05fa5d9bf892.png" /></p>
 
 So, after awaiting the promise that `get()` returns, we have the requested use case ready to use in a variable. No mystery here, all use cases have a single method called execute:
 
-<center><image width="502" src="https://user-images.githubusercontent.com/4168389/161743734-2e1e6fc5-08e2-43f5-a613-b66b450f4674.png" /></center>
+<p align="center"><image width="502" src="https://user-images.githubusercontent.com/4168389/161743734-2e1e6fc5-08e2-43f5-a613-b66b450f4674.png" /></p>
 
 And that's it! Now we obviously would have to implement the RemoveItemUseCase so it does what it's supposed to do. But before we can go down that road we need to make some concepts clear.
 
