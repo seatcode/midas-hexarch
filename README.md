@@ -7,11 +7,11 @@
 - [Concepts](#concepts)
   - [Domain](#domain)
   - [Config](#config)
-  - [Models](#models)
+  - [Models in general](#models-in-general)
   - [Types](#types)
   - [Context](#context)
 - [Domain pieces](#domain-pieces)
-  - [Models](#models-1)
+  - [Models](#models)
   - [Use Cases](#use-cases)
   - [Services](#services)
   - [Mappers](#mappers)
@@ -138,7 +138,7 @@ config
 |- config.ts
 ```
 
-### Models
+### Models in general
   - They're private, meant to be consumed from the inside of the domain.
   - They're contracts to ensure a certain structure is enforced in specific domain pieces or data you create afterwards.
   - They're TypeScript types and abstract classes.
