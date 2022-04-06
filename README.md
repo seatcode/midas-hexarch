@@ -1,7 +1,8 @@
 <img alt="Hexagonal Architecture MIDAS FE" width="584" src="https://user-images.githubusercontent.com/4168389/161611798-da1be7af-4c88-4d01-94ad-0e153aea7710.png" />
 
-> All you need to know to do Hexagonal Architecture in the MIDAS project
+> Reference for Hexagonal Architecture in the MIDAS project
 
+- [Warning](#warning)
 - [Introduction](#introduction)
 - [Usage from React](#usage-from-react)
 - [Concepts](#concepts)
@@ -19,6 +20,14 @@
   - [Services](#services)
   - [Mappers](#mappers)
   - [Repositories](#repositories)
+
+## Warning
+
+> ⚠️ **This is definitely not a complete guide to Hexagonal Architecture.**
+
+The  contents of this file are 100% tailored to the MIDAS Frontend project, and may or may not agree to any other Hexagonal Architecture implementations.
+
+Also, be aware that this is still new to the project and not every possible scenario is covered. The topic is huge, but we hope that this document helps in grasping what's needed to start applying it.
 
 ## Introduction
 
@@ -226,13 +235,13 @@ All the models are actually TypeScript interfaces, types, and abstract classes. 
 | `[DataName]Entity` | _Interface_ | Unique data that has an `id` |
 | `[DataName]Value` | _Interface_ | Data that is not unique |
 | `[DataName]Response` | _Interface_ | A response from a specific repository method |
-| `[Entity]Repository` | _Abstract class_ | An expected repository implementation |
+| `[Object]Repository` | _Abstract class_ | An expected repository implementation |
 
 Some name examples: `ProductEntity`, `ProductListValue`, `ProductListResponse`, `ProductRepository`.
 
 ### Use Cases
 
-Name pattern: `[Action][EntityOrValue]UseCase`
+Name pattern: `[Action][Object]UseCase`
 
 A use case is a public action that can be triggered from the outside of the domain. It's impelemented as a class with a single public asynchronous method called `execute`.
 
@@ -244,7 +253,7 @@ It can only use:
 
 > **Note:** It CANNOT use other use cases. If you need to reuse logic from a use case consider creating a service.
 
-A simple example of a use case in the useCases directory of a `cart` context:
+Example:
 
 ```
 useCases
@@ -255,21 +264,28 @@ useCases
 
 ```ts
 // index.ts
+// We are only allowed to import models
 import { Config, UseCase } from 'domain/models'
 import { CartRepository } from 'domain/cart/models'
 
+//    Remember extending from the proper model ---v
 export default class RemoveItemUseCase extends UseCase {
+  // Everything the use case needs is a private property
   private readonly cartRepository
 
+  // Dependencies are received here from the `factory.ts` file
   constructor (dependencies: {
     config: Config
     cartRepository: CartRepository
   }) {
+    // `super` sets the config property from dependencies...
     super(dependencies)
+    // ...and every other dependency is manually set as a property...
     this.cartRepository = dependencies.cartRepository
   }
 
   async execute ({ id }: { id: number }): Promise<void> {
+    // ...so we can use it ---v
     return await this.cartRepository.delete(id)
   }
 }
@@ -277,7 +293,7 @@ export default class RemoveItemUseCase extends UseCase {
 
 ### Services
 
-Name pattern: `[Action][EntityOrValue]Service`
+Name pattern: `[Action][Object]Service`
 
 A service is the same thing as a use case but it's private, meaning it cannot be consumed from the outside of the domain.
 
@@ -286,6 +302,19 @@ It can only use:
 - Other services
 - Mappers
 - Repositories
+
+Example:
+
+```
+services
+|- GetItemService
+   |- index.ts <-- Code
+   |- factory.ts <-- Dependency Injection
+```
+
+```ts
+// TODO: write the code example
+```
 
 ### Mappers
 
@@ -297,12 +326,48 @@ It can only use:
 - Models
 - Other mappers
 
+Example:
+
+```
+mappers
+|- FromProductListResponseToProductListValue
+   |- index.ts <-- Code
+   |- factory.ts <-- Dependency Injection
+```
+
+Or, although it will not always be possible, we can optionally cut the part of the name that is repeated at the beginning (ProductList) for brevity:
+
+```diff
+mappers
+-|- FromProductListResponseToProductListValue
++|- FromResponseToProductListValue
+   |- index.ts <-- Code
+   |- factory.ts <-- Dependency Injection
+```
+
+```ts
+// TODO: write the code example
+```
+
 ### Repositories
 
-Name pattern: `[Source][Entity]Repository`
+Name pattern: `[Source][Object]Repository`
 
 A repository is a source of data. You can think of it as an API client as it provides an open list of public asynchronous methods for a given subject, like CRUD methods (but not necessarily) such as list, get, delete, and so on.
 
 It deals with all the logic that is necessary to connect and manage the access to any data source that is outside of the app, such as API endpoints, but also local storage, session storage, cookies, or other kind of sources.
 
 It can only use models.
+
+Example:
+
+```
+repositories
+|- CartRepository
+   |- index.ts <-- Code
+   |- factory.ts <-- Dependency Injection
+```
+
+```ts
+// TODO: write the code example
+```
