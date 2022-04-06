@@ -311,6 +311,8 @@ export default class RemoveItemUseCase extends UseCase {
 }
 ```
 
+👀 You can also have a look at the `ListDatapoolsUseCase` in MIDAS, which was the first use case to be implemented, for a more extensive example.
+
 ### Services
 
 Name pattern: `[Action][Object]Service`
@@ -335,6 +337,8 @@ services
 ```ts
 // TODO: write the code example
 ```
+
+👀 No service has been implemented in MIDAS just yet.
 
 ### Mappers
 
@@ -369,6 +373,8 @@ mappers
 // TODO: write the code example
 ```
 
+👀 You can also have a look at the `FromResponseToDatapoolListValueMapper` in MIDAS, which was the first mapper to be implemented, for a more extensive example.
+
 ### Repositories
 
 Name pattern: `[Source][Object]Repository`
@@ -383,7 +389,7 @@ Example:
 
 ```
 repositories
-|- CartRepository
+|- ApiCartRepository
    |- index.ts <-- Code
    |- factory.ts <-- Dependency Injection
 ```
@@ -391,3 +397,5 @@ repositories
 ```ts
 // TODO: write the code example
 ```
+
+👀 You can also have a look at the `ApiDatapoolRepository` in MIDAS, which was the first repository to be implemented, for a more extensive example.
