@@ -2,7 +2,7 @@
 
 > Reference for Hexagonal Architecture in the MIDAS project
 
-- [Warning](#warning)
+- [Disclaimer](#disclaimer)
 - [Introduction](#introduction)
 - [Usage from React](#usage-from-react)
 - [Concepts](#concepts)
@@ -21,13 +21,15 @@
   - [Mappers](#mappers)
   - [Repositories](#repositories)
 
-## Warning
+## Disclaimer
 
 > ⚠️ **This is definitely not a complete guide to Hexagonal Architecture.**
 
 The  contents of this file are 100% tailored to the MIDAS Frontend project, and may or may not agree to any other Hexagonal Architecture implementations.
 
 Also, be aware that this is still new to the project and not every possible scenario is covered. The topic is huge, but we hope that this document helps in grasping what's needed to start applying it.
+
+That said, if you feel something is missing (which will) feel free to raise it so we can progressively reach the point where no important doubts are left.
 
 ## Introduction
 
@@ -261,10 +263,28 @@ useCases
    |- index.ts <-- Code
    |- factory.ts <-- Dependency Injection
 ```
+```ts
+// factory.ts
+import { Config } from 'domain/models'
+
+// We import the factories for all the dependencies required by the use case.
+// In this case there's only one apart from the config, this repository:
+import apiCartRepositoryFactory from '../../repositories/ApiCartRepository/factory'
+// And we import the use case itself...
+import RemoveItemUseCase from '.'
+
+//                   v--- `config` comes from the place the factory's run
+export default ({ config }: { config: Config }): RemoveItemUseCase =>
+  new RemoveItemUseCase({ // <-- ...so we can instantiate it...
+    // ...and pass in the required dependencies:
+    config,
+    cartRepository: apiCartRepositoryFactory({ config })
+  })
+```
 
 ```ts
 // index.ts
-// We are only allowed to import models
+// Since this is not a factory, we are only allowed to import models
 import { Config, UseCase } from 'domain/models'
 import { CartRepository } from 'domain/cart/models'
 
